@@ -2,6 +2,12 @@
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
+## Environment Variables
+
+- Create a `.env.local` file in the parent folder of the NewsMonkey React App.
+- Go to [https://newsapi.org/](https://newsapi.org/) and get your API key.
+- Create an Environment Variable Named **_REACT_APP_NEWS_API_KEY_** and store the API key (i.e. `REACT_APP_NEWS_API_KEY = "Your_API_Key"`).
+
 ## Available Scripts
 
 In the project directory, you can run:
