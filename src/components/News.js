@@ -8,7 +8,6 @@ export default function News(props) {
 
     const [articles, setArticles] = useState([]);
     const [page, setPage] = useState(1);
-    const [totalResults, setTotalResults] = useState(0);
     const [totalPages, setTotalPages] = useState(0);
     const [hasMore, setHasMore] = useState(false);
 
@@ -16,40 +15,37 @@ export default function News(props) {
         return string.charAt(0).toUpperCase() + string.slice(1);
     }
 
-
     async function updateNews() {
-        props.setProgress(10);
+        await props.setProgress(10);
         const url = `https://newsapi.org/v2/top-headlines?country=${props.country}&category=${props.category}&apiKey=${props.apiKey}&page=${page}&pageSize=${props.pageSize}`;
         let data = await fetch(url);
-        props.setProgress(30);
+        await props.setProgress(30);
         let parsedData = await data.json()
         let totalPages = Math.ceil(parsedData.totalResults / props.pageSize);
-        props.setProgress(50);
+        await props.setProgress(50);
 
         // Set States
-        setArticles(parsedData.articles)
-        setTotalResults(parsedData.totalResults)
-        setTotalPages(totalPages)
-        setHasMore(page < totalPages)
+        setArticles(parsedData.articles);
+        setTotalPages(totalPages);
+        setHasMore(page < totalPages);
 
-        props.setProgress(100);
+        await props.setProgress(100);
     }
 
     useEffect(() => {
-        updateNews();
         document.title = `${capitalizeFirstLetter(props.category)} - NewsMonkey`;
-    }, [])
+        updateNews();
+    }, []) // eslint-disable-line
 
     const fetchMoreData = async () => {
         const url = `https://newsapi.org/v2/top-headlines?country=${props.country}&category=${props.category}&apiKey=${props.apiKey}&page=${page + 1}&pageSize=${props.pageSize}`;
         let data = await fetch(url);
-        let parsedData = await data.json()
+        let parsedData = await data.json();
 
         // Set States
-        setArticles(articles.concat(parsedData.articles))
-        setTotalResults(parsedData.totalResults)
-        setPage(page + 1)
-        setHasMore(page < totalPages)
+        setArticles(articles.concat(parsedData.articles));
+        setPage(page + 1);
+        setHasMore(page < totalPages);
     };
 
     return (

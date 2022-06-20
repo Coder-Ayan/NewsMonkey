@@ -5,3 +5,7 @@
 .translateY-middle {
     transform: translateY(-50%);
 }
+
+.mt-75 {
+    margin-top: 75px;
+}
