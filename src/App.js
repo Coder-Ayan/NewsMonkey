@@ -1,4 +1,5 @@
 import './App.css';
+import React, { useState } from 'react'
 import {
     BrowserRouter as Router,
     Switch,
@@ -6,44 +7,39 @@ import {
 } from "react-router-dom";
 import LoadingBar from 'react-top-loading-bar';
 
-import React, { Component } from 'react'
 import Navbar from './components/Navbar';
 import News from './components/News';
 
-export default class App extends Component {
-    categories = ['Business', 'Entertainment', 'Health', 'Science', 'Sports', 'Technology'];
-    pageSize = 6;
-    apiKey = process.env.REACT_APP_NEWS_API_KEY;
-    state = { progress: 0 };
-    setProgress = (progress) => {
-        this.setState({ progress: progress });
-    }
+export default function App() {
+    let categories = ['Business', 'Entertainment', 'Health', 'Science', 'Sports', 'Technology'];
+    let pageSize = 6;
+    let apiKey = process.env.REACT_APP_NEWS_API_KEY;
 
-    render() {
-        return (
-            <Router>
-                <LoadingBar
-                    color='#f11946'
-                    progress={this.state.progress}
-                />
-                <Navbar title="NewsMonkey" categories={this.categories} />
-                <div className="container">
-                    <Switch>
-                        <Route key='general' path="/" exact>
-                            <News setProgress={this.setProgress} category='general' apiKey={this.apiKey} pageSize={this.pageSize} />
-                        </Route>
+    const [progress, setProgress] = useState(0);
 
-                        {/* Route all News components with categories */}
-                        {this.categories.map(category => {
-                            return (
-                                <Route key={category.toLowerCase()} path={`/${category.toLowerCase()}`} exact>
-                                    <News setProgress={this.setProgress} category={category.toLowerCase()} apiKey={this.apiKey} pageSize={this.pageSize} />
-                                </Route>
-                            )
-                        })}
-                    </Switch>
-                </div>
-            </Router>
-        )
-    }
+    return (
+        <Router>
+            <LoadingBar
+                color='#f11946'
+                progress={progress}
+            />
+            <Navbar title="NewsMonkey" categories={categories} />
+            <div className="container">
+                <Switch>
+                    <Route key='general' path="/" exact>
+                        <News setProgress={setProgress} category='general' apiKey={apiKey} pageSize={pageSize} />
+                    </Route>
+
+                    {/* Route all News components with categories */}
+                    {categories.map(category => {
+                        return (
+                            <Route key={category.toLowerCase()} path={`/${category.toLowerCase()}`} exact>
+                                <News setProgress={setProgress} category={category.toLowerCase()} apiKey={apiKey} pageSize={pageSize} />
+                            </Route>
+                        )
+                    })}
+                </Switch>
+            </div>
+        </Router>
+    )
 }
